@@ -59,7 +59,12 @@ todoForm.addEventListener("submit", function(evt) {
 
     let taskName = document.createElement("span")
     taskName.classList.add("card-title");
-    taskName.innerText = document.getElementById("taskadd").value;
+    if (checkDupTaskName(document.getElementById("taskadd").value) == 0){
+        taskName.innerText = document.getElementById("taskadd").value;
+    } else {
+        alert("ERROR: This task name already exists, please select a different name!");
+        return;
+    }
 
     let cardAction = document.createElement("div");
     cardAction.classList.add("card-action");
@@ -88,6 +93,8 @@ todoForm.addEventListener("submit", function(evt) {
     // save to localStorage
     savedTasks.push({task: taskName.innerText, isComplete: false});
     localStorage.setItem("tasks", JSON.stringify(savedTasks));
+
+    document.getElementById("taskadd").blur();
 
 });
 
@@ -123,3 +130,13 @@ taskContainer.addEventListener("click", function(evt) {
 
 
 });
+
+function checkDupTaskName (taskname) {
+    let count = 0 ;
+    for (let i=0; i < savedTasks.length; i++) {
+        if (document.getElementById("taskadd").value === savedTasks[i].task) {
+        count = count + 1;
+        }
+    }
+    return count;
+}
